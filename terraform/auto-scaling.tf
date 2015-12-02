@@ -4,7 +4,7 @@ resource "aws_launch_configuration" "ecs" {
     instance_type = "t2.micro"
 #   iam_instance_profile = ""
     key_name = "${lookup(var.key_name, var.aws_region)}"
-#   security_groups = []
+    security_groups = ["${aws_security_group.all_traffic.id}"]
     associate_public_ip_address = true
 #   user_data = []
     enable_monitoring = true
