@@ -1,6 +1,6 @@
 #Overview
-This project creates, but does not provision, an [AWS](http://aws.amazon.com/) environment suitable for running a private 
-[Docker Registry]().
+This project creates, but does not provision, an [AWS](http://aws.amazon.com/) environment suitable for running an 
+ECS fleet.
 
 #Prerequisites
 
