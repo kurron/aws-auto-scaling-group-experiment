@@ -1,0 +1,44 @@
+{
+    "description": "Builds a Docker enabled Ubuntu 14.04 Server x64 AMI",
+    "min_packer_version": "0.7.5",
+
+    "variables": {
+        "region": "us-east-1",
+        "source_ami": "ami-d05e75b8",
+        "ssh_username": "ubuntu"
+    },
+
+    "builders": [{
+        "type": "amazon-ebs",
+        "ami_name": "trusty-x64-docker-{{timestamp}}",
+        "ami_description": "AMI with Docker pre-installed",
+        "associate_public_ip_address": true,
+        "instance_type": "t2.micro",
+        "region": "{{ user `region` }}",
+        "source_ami": "{{ user `source_ami` }}",
+        "ssh_port": 22,
+        "ssh_username": "{{ user `ssh_username` }}",
+        "ssh_timeout": "5m",
+        "tags": {
+            "OS": "Ubuntu",
+            "Version": "14.04",
+            "State": "in-development",
+            "Container Support": "Docker",
+            "Monitoring Support": "New Relic"
+        }
+    }],	
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": ["ansible/scripts/install-ansible.sh"]
+        },
+        {
+            "playbook_dir"  : "ansible",
+            "playbook_file" : "ansible/playbook.yml",
+            "type"          : "ansible-local"
+        }
+    ],
+    "post-processors": [
+    ]
+}
+
