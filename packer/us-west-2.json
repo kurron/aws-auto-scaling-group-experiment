@@ -26,6 +26,7 @@
         "subnet_id": "{{ user `subnet_id` }}",
         "vpc_id": "{{ user `vpc_id` }}",
         "tags": {
+            "Name": "Docker",
             "OS": "Ubuntu",
             "Version": "14.04",
             "State": "In-Production",
