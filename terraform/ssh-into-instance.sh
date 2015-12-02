@@ -1,4 +1,6 @@
 #!/bin/bash
 
 IP=$1
-ssh -v -i ../open-vpn.pem ubuntu@${IP}
+CMD="ssh -v -i ../auto-scaling-experiments.pem ubuntu@${IP}"
+echo $CMD
+$CMD

@@ -54,7 +54,7 @@ variable "key_name" {
     default = {
         us-east-1      = ""
         us-west-1      = ""
-        us-west-2      = "kurr-experiments"
+        us-west-2      = "auto-scaling-experiments"
         eu-west-1      = ""
         eu-central-1   = ""
         sa-east-1      = ""
@@ -70,7 +70,8 @@ variable "aws_amis" {
     default = {
         us-east-1      = "ami-81ea1aea"
         us-west-1      = "ami-df6a8b9b"
-        us-west-2      = "ami-5189a661"
+        us-west-2      = "ami-b3eefcd2"
+#       us-west-2      = "ami-5189a661"
         eu-west-1      = "ami-47a23a30"
         eu-central-1   = "ami-accff2b1"
         sa-east-1      = "ami-4d883350"
