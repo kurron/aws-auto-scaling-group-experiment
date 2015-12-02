@@ -1,6 +1,6 @@
 variable "aws_region" {
     description = "AWS region to build into."
-    default = "us-east-1"
+    default = "us-west-2"
 }
 
 variable "vpc_network" {
@@ -10,12 +10,12 @@ variable "vpc_network" {
 
 variable "realm" {
     description = "The logical group that all of the infrastructure belongs to."
-    default = "Production" 
+    default = "Experimentation" 
 }
 
 variable "purpose" {
     description = "A tag indicating why all the infrastructure exists, eg. load-testing."
-    default = "OpenVPN" 
+    default = "AutoScaling" 
 }
 
 variable "created_by" {
@@ -25,7 +25,7 @@ variable "created_by" {
 
 variable "subnet_instance_count" {
     description = "How many subnets to create (should match the number of availability zones)."
-    default = "4"
+    default = "3"
 }
 
 variable "subnet_name" {
@@ -52,9 +52,9 @@ variable "public_cidr" {
 variable "key_name" {
     description = "Name of the SSH keypair to use in AWS."
     default = {
-        us-east-1      = "open-vpn"
+        us-east-1      = ""
         us-west-1      = ""
-        us-west-2      = ""
+        us-west-2      = "kurr-experiments"
         eu-west-1      = ""
         eu-central-1   = ""
         sa-east-1      = ""
@@ -83,10 +83,9 @@ variable "aws_amis" {
 
 variable "availability_zone" {
   default = {
-    "0" = "us-east-1a"
-    "1" = "us-east-1b"
-    "2" = "us-east-1d"
-    "3" = "us-east-1e"
+    "0" = "us-west-2a"
+    "1" = "us-west-2b"
+    "2" = "us-west-2c"
   }
 }
 

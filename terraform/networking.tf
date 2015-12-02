@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
     enable_dns_hostnames = true
 
     tags {
-        Name = "OpenVPN"
+        Name = "AutoScaling"
         Realm = "${var.realm}"
         Purpose = "${var.purpose}"
         Managed-By = "${var.created_by}"
@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "main" {
     vpc_id = "${aws_vpc.main.id}"
 
     tags {
-        Name = "OpenVPN"
+        Name = "AutoScaling"
         Realm = "${var.realm}"
         Purpose = "${var.purpose}"
         Managed-By = "${var.created_by}"
@@ -46,7 +46,7 @@ resource "aws_route_table" "main" {
     }
 
     tags {
-        Name = "OpenVPN"
+        Name = "AutoScaling"
         Realm = "${var.realm}"
         Purpose = "${var.purpose}"
         Managed-By = "${var.created_by}"
@@ -63,7 +63,7 @@ resource "aws_security_group" "all_traffic" {
     description = "Allow inbound and outbound access on ALL ports."
     vpc_id = "${aws_vpc.main.id}"
     tags {
-        Name = "OpenVPN"
+        Name = "AutoScaling"
         Realm = "${var.realm}"
         Purpose = "${var.purpose}"
         Managed-By = "${var.created_by}"
