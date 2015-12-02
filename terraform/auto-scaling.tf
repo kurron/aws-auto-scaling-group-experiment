@@ -2,11 +2,14 @@ resource "aws_launch_configuration" "ecs" {
 #   name_prefix = "ecs-instance-"
     image_id = "${lookup(var.aws_amis, var.aws_region)}"
     instance_type = "t2.micro"
-#   iam_instance_profile = ""
+    iam_instance_profile = "${aws_iam_instance_profile.ecs_profile.id}"
     key_name = "${lookup(var.key_name, var.aws_region)}"
     security_groups = ["${aws_security_group.all_traffic.id}"]
     associate_public_ip_address = true
-#   user_data = []
+    user_data = <<DATA
+#!/bin/bash
+echo ECS_CLUSTER=example-cluster >> /etc/ecs/ecs.config
+DATA 
     enable_monitoring = true
     ebs_optimized = false
 #   root_block_device = ???
