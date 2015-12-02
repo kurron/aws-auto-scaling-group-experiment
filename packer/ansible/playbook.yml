@@ -29,3 +29,16 @@
 #   - name: Delete the old Docker directory so people won't get confused
 #     file: path=/var/lib/docker state=absent
 
+- name: Configure Rsyslog To Forward to Loggly
+  hosts: localhost
+  sudo: True
+  vars:
+       logglyKey: "5fcf8054-54d4-470c-a357-a85c5e918a48"
+       logglyTag: "ecs-fleet"
+  tasks:
+    - name: Copy Rsyslog Configuration File
+      template: src=templates/loggly.conf dest=/etc/rsyslog.d/22-loggly.conf mode=0444 backup=yes force=yes
+    - name: Restart the Rsyslog
+      command: /usr/sbin/service rsyslog restart
+    - name: Send a test message
+      command: logger 'Hello From Ansible!'
