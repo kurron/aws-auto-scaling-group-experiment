@@ -1,7 +1,6 @@
 #Overview
-This project creates an [AWS](http://aws.amazon.com/) environment suitable for running a private
-[Docker Registry](https://docs.docker.com/registry/) in the Amazon cloud. The configuration uses 
-Elastic Load Balancer to manage network traffic and S3 for storage. 
+This project creates an [AWS](http://aws.amazon.com/) environment suitable for testing 
+auto-scaling groups and EC2 Container Service.
 
 #Prerequisites
 
