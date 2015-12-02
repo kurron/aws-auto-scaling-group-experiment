@@ -32,6 +32,12 @@ resource "aws_autoscaling_group" "ecs" {
     wait_for_capacity_timeout = "10m"
 
     tag {
+        key = "Name"
+        value = "ECS Instance"
+        propagate_at_launch = true
+    }
+
+    tag {
         key = "Realm"
         value = "${var.realm}"
         propagate_at_launch = true
