@@ -1,0 +1,93 @@
+[
+    {
+      "volumesFrom": [
+        
+      ],
+      "memory": 300,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "hostname": null,
+      "essential": true,
+      "entryPoint": null,
+      "mountPoints": [
+        {
+          "containerPath": "\/usr\/local\/apache2\/htdocs",
+          "sourceVolume": "my-vol",
+          "readOnly": null
+        }
+      ],
+      "name": "simple-app",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [
+        
+      ],
+      "links": [
+        
+      ],
+      "workingDirectory": null,
+      "readonlyRootFilesystem": null,
+      "image": "httpd:2.4",
+      "command": null,
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 10,
+      "privileged": null
+    },
+    {
+      "volumesFrom": [
+        {
+          "readOnly": null,
+          "sourceContainer": "simple-app"
+        }
+      ],
+      "memory": 200,
+      "extraHosts": null,
+      "dnsServers": null,
+      "disableNetworking": null,
+      "dnsSearchDomains": null,
+      "portMappings": [
+        
+      ],
+      "hostname": null,
+      "essential": false,
+      "entryPoint": [
+        "sh",
+        "-c"
+      ],
+      "mountPoints": [
+        
+      ],
+      "name": "busybox",
+      "ulimits": null,
+      "dockerSecurityOptions": null,
+      "environment": [
+        
+      ],
+      "links": [
+        
+      ],
+      "workingDirectory": null,
+      "readonlyRootFilesystem": null,
+      "image": "busybox",
+      "command": [
+        "\/bin\/sh -c \"while true; do echo '<html> <head> <title>Amazon ECS Sample App<\/title> <style>body {margin-top: 40px; background-color: #333;} <\/style> <\/head><body> <div style=color:white;text-align:center> <h1>Amazon ECS Sample App<\/h1> <h2>Congratulations!<\/h2> <p>Your application is now running on a container in Amazon ECS.<\/p>' > top; \/bin\/date > date ; echo '<\/div><\/body><\/html>' > bottom; cat top date bottom > \/usr\/local\/apache2\/htdocs\/index.html ; sleep 1; done\""
+      ],
+      "user": null,
+      "dockerLabels": null,
+      "logConfiguration": null,
+      "cpu": 10,
+      "privileged": null
+    }
+]
+
