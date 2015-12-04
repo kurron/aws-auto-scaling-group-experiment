@@ -32,17 +32,51 @@ resource "aws_iam_role" "ecs_instance_role" {
 EOF
 }
 
-# I was unable to create the policy by hand and have it work. Could be me, could be Terraform. Using the policy created by the wizard.
-resource "aws_iam_policy_attachment" "ecs_instance_role" {
-    name = "ecs_instance_role"
-    roles = ["${aws_iam_role.ecs_instance_role.name}"]
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+resource "aws_iam_role_policy" "ecs_instance_role" {
+    name = "ecs-instance-role"
+    role = "${aws_iam_role.ecs_instance_role.id}"
+    policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecs:CreateCluster",
+        "ecs:DeregisterContainerInstance",
+        "ecs:DiscoverPollEndpoint",
+        "ecs:Poll",
+        "ecs:RegisterContainerInstance",
+        "ecs:StartTelemetrySession",
+        "ecs:Submit*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 
-# I was unable to create the policy by hand and have it work. Could be me, could be Terraform. Using the policy created by the wizard.
-resource "aws_iam_policy_attachment" "ecs_scheduler_role" {
-    name = "ecs_scheduler_role"
-    roles = ["${aws_iam_role.ecs_instance_role.name}"]
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+resource "aws_iam_role_policy" "ecs_scheduler_role" {
+    name = "ecs-scheduler-role"
+    role = "${aws_iam_role.ecs_instance_role.id}"
+    policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:Describe*",
+        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+        "elasticloadbalancing:Describe*",
+        "elasticloadbalancing:RegisterInstancesWithLoadBalancer"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 
