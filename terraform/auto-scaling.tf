@@ -29,7 +29,7 @@ resource "aws_autoscaling_group" "ecs" {
     desired_capacity = 3
 #   min_elb_capacity = 9
     force_delete = false
-#   load_balancers = []
+#   load_balancers = ["${aws_elb.load_balancer.name}"]
     vpc_zone_identifier = ["${aws_subnet.subnet.*.id}"]
 #   termination_policies = []
     wait_for_capacity_timeout = "10m"
