@@ -1,75 +1,48 @@
-resource "aws_iam_role" "ecs_role" {
-    name = "ecs-role"
-    path = "/"
+resource "aws_iam_instance_profile" "ecs_profile" {
+    name = "ecs-instance-profile"
+    roles = ["${aws_iam_role.ecs_instance_role.name}"]
+}
+
+# the trick is to provide TWO trust policies -- one for each role
+resource "aws_iam_role" "ecs_instance_role" {
+    name = "ecs-instance-role"
+#   path = "/"
     assume_role_policy = <<EOF
 {
-  "Version": "2012-10-17",
+  "Version": "2008-10-17",
   "Statement": [
     {
-      "Action": "sts:AssumeRole",
+      "Sid": "",
+      "Effect": "Allow",
       "Principal": {
         "Service": "ec2.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy" "ecs_instance_policy" {
-    name = "ecs-instance-policy"
-    role = "${aws_iam_role.ecs_role.id}"
-    policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
+      "Action": "sts:AssumeRole"
+    },
     {
+      "Sid": "",
       "Effect": "Allow",
-      "Action": [
-        "ecs:CreateCluster",
-        "ecs:DeregisterContainerInstance",
-        "ecs:DiscoverPollEndpoint",
-        "ecs:Poll",
-        "ecs:RegisterContainerInstance",
-        "ecs:StartTelemetrySession",
-        "ecs:Submit*"
-      ],
-      "Resource": "*"
+      "Principal": {
+        "Service": "ecs.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
     }
   ]
 }
 EOF
 }
 
-resource "aws_iam_role_policy" "ecs_service_policy" {
-    name = "ecs-service-policy"
-    role = "${aws_iam_role.ecs_role.id}"
-    policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "elasticloadbalancing:Describe*",
-        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-        "ec2:Describe*",
-        "ec2:AuthorizeSecurityGroupIngress"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
-}
-EOF
+# I was unable to create the policy by hand and have it work. Could be me, could be Terraform. Using the policy created by the wizard.
+resource "aws_iam_policy_attachment" "ecs_instance_role" {
+    name = "ecs_instance_role"
+    roles = ["${aws_iam_role.ecs_instance_role.name}"]
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
-resource "aws_iam_instance_profile" "ecs_profile" {
-    name = "ecs-profile"
-    roles = ["${aws_iam_role.ecs_role.name}"]
+# I was unable to create the policy by hand and have it work. Could be me, could be Terraform. Using the policy created by the wizard.
+resource "aws_iam_policy_attachment" "ecs_scheduler_role" {
+    name = "ecs_scheduler_role"
+    roles = ["${aws_iam_role.ecs_instance_role.name}"]
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
