@@ -44,7 +44,7 @@ echo $SCALE_UP
 eval $SCALE_UP
 
 # set the capacity to 0 during normal off hours: 5PM to 8AM UTC every day
-SCALE_DOWN='aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name ecs-autoscaling-experiment --scheduled-action-name scaleup-schedule-daily --recurrence "0 17 1-31 1-12 1-7" --min-size 0 --max-size 0 --desired-capacity 0'
+SCALE_DOWN='aws autoscaling put-scheduled-update-group-action --auto-scaling-group-name ecs-autoscaling-experiment --scheduled-action-name scaledown-schedule-daily --recurrence "0 17 1-31 1-12 1-7" --min-size 0 --max-size 0 --desired-capacity 0'
 echo $SCALE_DOWN
 eval $SCALE_DOWN
 
