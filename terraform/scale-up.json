@@ -1,0 +1,9 @@
+{
+    "AutoScalingGroupName": "ecs-autoscaling-experiment",
+    "ScheduledActionName": "scaleup-schedule-daily",
+    "Recurrence": "30 0 1 1,6,12 0",
+    "MinSize": 1,
+    "MaxSize": 6,
+    "DesiredCapacity": 3
+}
+
