@@ -9,7 +9,7 @@ resource "aws_launch_configuration" "ecs" {
     user_data = <<DATA
 #!/bin/bash
 echo ECS_CLUSTER=example-cluster >> /etc/ecs/ecs.config
-DATA 
+DATA
     enable_monitoring = true
     ebs_optimized = false
 #   root_block_device = ???
