@@ -75,6 +75,12 @@ storage assets will be destroyed and all your data will be lost.** You have been
 All the assets are placed within a VPC so as to isolate it from other installations.  Only one availability zone is used since 
 this configuration is not highly available. 
 
+##Scheduled Provisioning
+Currently, Terraform does not support scheduled provisioning of auto-scaling groups so you have to drop down to the AWS CLI.
+An example of how to set up a schecudule can be found in the `create-scaling-schedule.sh` script.  The script is very simple 
+and does not know about the infrastructure set up by Terraform so you will have to edit it before running. It will set up a 
+schedule where instances are spun in the morning and torn down at night.  This is a common cost savings scenario.
+
 #Troubleshooting
 
 #Use Your Own Keys
@@ -97,7 +103,7 @@ plan and those that were not.  An example of some tags that are applied to an EC
 * Managed-By: Managed By Terraform
 * Name: Registry Blue
 * Purpose: experimentation 
-* Realm: Docker Testing
+* Realm: Experimentation 
 
 The `Managed-By` indicates that the asset was created by Terraform and not by hand.  The `Name` tag is the standard AWS tag giving the 
 asset a unique name.  Notice the use of the color `Blue` in the name?  Each availability zone is assigned a color which allows you to 
