@@ -4,8 +4,8 @@
 
     "variables": {
         "region": "us-west-2",
-        "vpc_id": "vpc-ff91bb9a",
-        "subnet_id": "subnet-b3a4f9c4",
+        "vpc_id": "vpc-fe24779b",
+        "subnet_id": "subnet-7181c606",
         "source_ami": "ami-5189a661",
         "ssh_username": "ubuntu"
     },

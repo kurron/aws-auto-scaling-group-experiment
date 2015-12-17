@@ -21,7 +21,7 @@
     - name: Rebuild Grub
       command: /usr/sbin/update-grub
     - name: Make some adjustments to the Docker configuration
-      lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --storage-driver=aufs --graph={{ mount_point }}"'
+      lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --storage-driver=aufs --log-driver=syslog --graph={{ mount_point }}"'
     - name: Add account to the docker group 
       user: name={{ user_account }} groups=docker
     - name: Restart Docker
@@ -32,7 +32,7 @@
 #     file: path=/var/lib/docker state=absent
 
 - name: Install the ECS Agent
-  hosts: localhost
+  hosts: nobody
   sudo: True
   vars:
        logs: "/var/log/ecs"
