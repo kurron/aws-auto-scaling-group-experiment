@@ -59,3 +59,35 @@
       command: /usr/sbin/service rsyslog restart
     - name: Send a test message
       command: logger 'Hello From Ansible!'
+
+- name: Install Private Registry Files
+  hosts: localhost
+  sudo: True
+  vars:
+       user_account: ubuntu
+  tasks:
+      - name: Create CA certificates directory
+        file: path=/usr/local/share/ca-certificates/docker-registry state=directory
+      - name: Create SSL certificates directory
+        file: path=/etc/ssl/certs/ state=directory
+      - name: Create SSL certificates directory
+        get_url: >
+                url=http://192.168.254.81:81/artifactory/static/ease/docker-registry/certifcate/registry.transparent.CA.crt
+                dest=/usr/local/share/ca-certificates/docker-registry/registry.transparent.CA.crt
+        register: certificate
+      - name: Add registry to hosts file
+        lineinfile: dest=/etc/hosts line="192.168.254.90 registry.transparent.com"
+      - name: Add cd1 to hosts file
+        lineinfile: dest=/etc/hosts line="192.168.254.81 cd1"
+      - name: Update certificates
+        shell: update-ca-certificates
+        when: certificate|changed
+      - name: Place configuration file into the root account
+        get_url: url=http://192.168.254.81:81/artifactory/static/ease/docker-registry/.dockercfg dest=/root/.dockercfg
+      - name: Place configuration file into the home folder
+        get_url: url=http://192.168.254.81:81/artifactory/static/ease/docker-registry/.dockercfg dest=/home/{{ user_account }}/.dockercfg
+      - name: Set permissions on the home directory
+        file: path=/home/{{ user_account }} owner={{ user_account }} group={{ user_account }} recurse=true state=directory
+      - name: Restart Docker
+        command: service docker restart
+
