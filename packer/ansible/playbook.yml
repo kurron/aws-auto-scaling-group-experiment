@@ -1,13 +1,15 @@
 ---
 - name: Install Docker
   hosts: localhost
-  sudo: True
+  become: yes
+  become_method: sudo
   vars:
        user_account: ubuntu
 #      This must match the mount point that is used by the LVM creation task
 #      mount_point: /opt/docker
        mount_point: /var/lib/docker
   tasks:
+      # have to use cURL because of https://github.com/ansible/ansible/issues/12161
     - name: Install cURL
       apt: name=curl state=latest update_cache=true cache_valid_time=600
     - name: Download Docker Installation Script
@@ -25,15 +27,14 @@
     - name: Add account to the docker group 
       user: name={{ user_account }} groups=docker
     - name: Restart Docker
-      command: service docker restart
+      service: name=docker state=restarted
     - name: Test Docker
       command: docker run hello-world
-#   - name: Delete the old Docker directory so people won't get confused
-#     file: path=/var/lib/docker state=absent
 
 - name: Configure Rsyslog To Forward to Loggly
   hosts: localhost
-  sudo: True
+  become: yes
+  become_method: sudo
   vars:
        logglyKey: "5fcf8054-54d4-470c-a357-a85c5e918a48"
        logglyTag: "ecs-fleet"
@@ -41,13 +42,14 @@
     - name: Copy Rsyslog Configuration File
       template: src=templates/loggly.conf dest=/etc/rsyslog.d/22-loggly.conf mode=0444 backup=yes force=yes
     - name: Restart the Rsyslog
-      command: /usr/sbin/service rsyslog restart
+      service: name=rsyslog state=restarted
     - name: Send a test message
       command: logger 'Hello From Ansible!'
 
 - name: Install Private Registry Files
   hosts: localhost
-  sudo: True
+  become: yes
+  become_method: sudo
   vars:
        user_account: ubuntu
   tasks:
@@ -74,5 +76,5 @@
       - name: Set permissions on the home directory
         file: path=/home/{{ user_account }} owner={{ user_account }} group={{ user_account }} recurse=true state=directory
       - name: Restart Docker
-        command: service docker restart
+        service: name=docker state=restarted
 
