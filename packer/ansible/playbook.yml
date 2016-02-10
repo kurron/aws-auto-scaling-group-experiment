@@ -21,7 +21,7 @@
     - name: Rebuild Grub
       command: /usr/sbin/update-grub
     - name: Make some adjustments to the Docker configuration
-      lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --storage-driver=aufs --log-driver=syslog --graph={{ mount_point }}"'
+      lineinfile: dest=/etc/default/docker line='DOCKER_OPTS="-H unix:///var/run/docker.sock --storage-driver=aufs --log-driver=syslog --graph={{ mount_point }}"'
     - name: Add account to the docker group 
       user: name={{ user_account }} groups=docker
     - name: Restart Docker
@@ -30,21 +30,6 @@
       command: docker run hello-world
 #   - name: Delete the old Docker directory so people won't get confused
 #     file: path=/var/lib/docker state=absent
-
-- name: Install the ECS Agent
-  hosts: nobody
-  sudo: True
-  vars:
-       logs: "/var/log/ecs"
-       data: "/var/lib/ecs/data"
-       cluster_name: "example-cluster"
-  tasks:
-    - name: Create the log mount point
-      command: mkdir -p {{ logs }}
-    - name: Create the data mount point
-      command: mkdir -p {{ data }}
-    - name: Launch the ECS agent container
-      command: docker run --name ecs-agent --detach=true --restart=on-failure:10 --volume=/var/run/docker.sock:/var/run/docker.sock --volume={{ logs }}:/log --volume={{ data }}:/data --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --volume=/var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro --publish=127.0.0.1:51678:51678 --env=ECS_LOGFILE=/log/ecs-agent.log --env=ECS_LOGLEVEL=info --env=ECS_DATADIR=/data --env=ECS_CLUSTER={{ cluster_name }} amazon/amazon-ecs-agent:latest
 
 - name: Configure Rsyslog To Forward to Loggly
   hosts: localhost
@@ -76,7 +61,7 @@
                 dest=/usr/local/share/ca-certificates/docker-registry/registry.transparent.CA.crt
         register: certificate
       - name: Add registry to hosts file
-        lineinfile: dest=/etc/hosts line="192.168.254.90 registry.transparent.com"
+        lineinfile: dest=/etc/hosts line="192.168.254.82 registry.transparent.com"
       - name: Add cd1 to hosts file
         lineinfile: dest=/etc/hosts line="192.168.254.81 cd1"
       - name: Update certificates
